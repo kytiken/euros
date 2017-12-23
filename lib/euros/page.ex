@@ -21,6 +21,10 @@ defmodule Euros.Page do
     |> Enum.filter(fn(uri) -> Euros.URI.is_same_host(uri, base_uri) end)
   end
 
+  def link_uris(%HTTPoison.Error{} = response) do
+    []
+  end
+
   defp all_link_uris(%HTTPoison.Response{} = response) do
     base_uri = to_base_uri(response)
     response.body
