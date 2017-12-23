@@ -12,12 +12,22 @@ defmodule Euros.HTTP do
   """
 
   @user_agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+  @default_timeout 60_000
 
   @doc """
   Get a web page
   """
   def fetch_pages(url) do
-    HTTPoison.start
-    HTTPoison.get!(url, %{"User-Agent": @user_agent})
+    {:ok, response} = HTTPoison.get(url, %{"User-Agent": @user_agent}, [recv_timeout: @default_timeout])
+    response
+  end
+
+  @doc """
+  Get a web page
+  """
+  def fetch_pages(url, callback) do
+    response = fetch_pages(url)
+    callback.(response)
+    response
   end
 end
