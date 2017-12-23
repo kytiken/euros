@@ -18,8 +18,14 @@ defmodule Euros.HTTP do
   Get a web page
   """
   def fetch_pages(url) do
-    {:ok, response} = HTTPoison.get(url, %{"User-Agent": @user_agent}, [recv_timeout: @default_timeout])
-    response
+    case HTTPoison.get(url, %{"User-Agent": @user_agent}, [timeout: @default_timeout, recv_timeout: @default_timeout]) do
+      {:ok, response} ->
+        response
+      {:error, error} ->
+        error
+      _ ->
+        IO.puts "error"
+    end
   end
 
   @doc """
