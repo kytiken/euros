@@ -11,9 +11,25 @@ by adding `euros` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:euros, "~> 0.0.0"}
+    {:euros, "~> 0.1.0"}
   ]
 end
+```
+
+## Usage
+
+```elixir
+iex> url = "https://euros-test.blogspot.jp/"
+iex> Euros.Core.crawl(url, fn(page) -> IO.puts(inspect(page)) end)
+%HTTPoison.Response{body: "<!DOCTYPE html><html dir='ltr'><head><meta content='width=device-width, initial-scale=1' name='viewport'/><title>euros test blog</title>....
+```
+
+## License
+```
+Copyright (c) 2017 kytiken
+
+Released under the MIT license
+https://github.com/kytiken/euros/blob/master/LICENSE
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
