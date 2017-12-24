@@ -4,9 +4,12 @@ defmodule Euros.Mixfile do
   def project do
     [
       app: :euros,
-      version: "0.0.0",
+      version: "0.1.0",
       elixir: "~> 1.5",
+      build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
+      description: description(),
+      package: package(),
       deps: deps(),
 
       # Docs
@@ -33,6 +36,22 @@ defmodule Euros.Mixfile do
       {:ex_doc, "~> 0.16", only: :dev, runtime: false},
       {:httpoison, "~> 0.13"},
       {:floki, "~> 0.19.0"}
+    ]
+  end
+
+  defp description do
+    "Euros web-spider framework"
+  end
+
+  defp package() do
+    [
+      # This option is only needed when you don't want to use the OTP application name
+      name: "euros",
+      # These are the default files included in the package
+      files: ["lib", "priv", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
+      maintainers: ["kytiken"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/kytiken/euros"}
     ]
   end
 end
