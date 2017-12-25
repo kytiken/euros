@@ -16,7 +16,7 @@ defmodule Euros.Mixfile do
       name: "Euros",
       source_url: "https://github.com/kytiken/euros",
       homepage_url: "https://github.com/kytiken/euros",
-      docs: [main: "Euros", # The main page in the docs
+      docs: [main: "Euros.Core", # The main page in the docs
             extras: ["README.md"]]
       ]
   end
