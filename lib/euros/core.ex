@@ -15,8 +15,11 @@ defmodule Euros.Core do
   """
   def crawl(url, callback) do
     registry_name = Register.Euros
-    {:ok, _} = Registry.start_link(:unique, registry_name)
-    crawl(url, registry_name, callback)
+    case Registry.start_link(:unique, registry_name) do
+      {:ok, _}                        -> crawl(url, registry_name, callback)
+      {:error, {:already_started, _}} -> crawl(url, registry_name, callback)
+    end
+    
   end
 
   defp crawl(url, registry_name, callback) do
