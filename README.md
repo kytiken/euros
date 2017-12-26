@@ -11,7 +11,7 @@ by adding `euros` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:euros, "~> 0.1.0"}
+    {:euros, "~> 0.1.1"}
   ]
 end
 ```
