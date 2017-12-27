@@ -19,16 +19,15 @@ defmodule Euros.Core do
       {:ok, _}                        -> crawl(url, registry_name, callback)
       {:error, {:already_started, _}} -> crawl(url, registry_name, callback)
     end
-    
   end
 
   defp crawl(url, registry_name, callback) do
-    tasks = url
-            |> Euros.HTTP.fetch_pages(callback)
-            |> Euros.Page.link_uris
-            |> Enum.filter(fn(uri) -> Registry.lookup(registry_name, uri) === [] end)
-            |> Enum.map(fn(uri) -> crawl_task(uri, registry_name, callback) end)
-    for task <- tasks, do: Task.await(task, @default_timeout)
+    url
+    |> Euros.HTTP.fetch_pages(callback)
+    |> Euros.Page.link_uris
+    |> Enum.filter(fn(uri) -> Registry.lookup(registry_name, uri) === [] end)
+    |> Enum.map(fn(uri) -> crawl_task(uri, registry_name, callback) end)
+    |> Enum.each(fn(task) -> Task.await(task, @default_timeout) end)
     :ok
   end
 
