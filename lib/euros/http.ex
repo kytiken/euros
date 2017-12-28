@@ -21,6 +21,8 @@ defmodule Euros.HTTP do
     case HTTPoison.get(url, %{"User-Agent": @user_agent}, [timeout: @default_timeout, recv_timeout: @default_timeout]) do
       {:ok, response} ->
         response
+      {:error, %HTTPoison.Error{id: nil, reason: :timeout}} ->
+        fetch_pages(url)
       {:error, error} ->
         error
       _ ->
