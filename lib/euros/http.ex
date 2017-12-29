@@ -18,24 +18,22 @@ defmodule Euros.HTTP do
   Get a web page
   """
   def fetch_pages(url) do
-    case HTTPoison.get(url, %{"User-Agent": @user_agent}, [timeout: @default_timeout, recv_timeout: @default_timeout]) do
-      {:ok, response} ->
-        response
-      {:error, %HTTPoison.Error{id: nil, reason: :timeout}} ->
-        fetch_pages(url)
-      {:error, error} ->
-        error
-      _ ->
-        IO.puts "error"
-    end
+    fetch_pages(url, %Euros.HTTPOption{})
   end
 
   @doc """
   Get a web page
   """
-  def fetch_pages(url, callback) do
-    response = fetch_pages(url)
-    callback.(response)
-    response
+  def fetch_pages(url, %Euros.HTTPOption{cookie: cookie, timeout: timeout, recv_timeout: recv_timeout} = option) do
+    case HTTPoison.get(url, %{"User-Agent": @user_agent}, [hackney: [cookie: cookie], timeout: timeout, recv_timeout: recv_timeout]) do
+      {:ok, response} ->
+        response
+      {:error, %HTTPoison.Error{id: nil, reason: :timeout}} ->
+        fetch_pages(url, option)
+      {:error, error} ->
+        error
+      _ ->
+        IO.puts "error"
+    end
   end
 end
