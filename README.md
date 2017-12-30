@@ -5,13 +5,10 @@ It is versatile, allowing you to write your own specialized spider tasks quickly
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `euros` to your list of dependencies in `mix.exs`:
-
 ```elixir
 def deps do
   [
-    {:euros, "~> 0.1.1"}
+    {:euros, "~> 0.2.0"}
   ]
 end
 ```
@@ -22,6 +19,28 @@ end
 iex> url = "https://euros-test.blogspot.jp/"
 iex> Euros.Core.crawl(url, fn(page) -> IO.puts(inspect(page)) end)
 %HTTPoison.Response{body: "<!DOCTYPE html><html dir='ltr'><head><meta content='width=device-width, initial-scale=1' name='viewport'/><title>euros test blog</title>....
+```
+
+### set cookie
+
+```elixir
+iex> url = "https://euros-test.blogspot.jp/" 
+"https://euros-test.blogspot.jp/"
+iex> option = %Euros.HTTPOption{cookie: "foo=bar;"}
+%Euros.HTTPOption{cookie: "foo=bar;", recv_timeout: 60000, timeout: 60000}
+iex> Euros.Core.crawl(url, fn(page) -> page |> inspect |> IO.puts end, option)
+```
+
+### cusotm url pattern
+
+```elixir
+iex> url = "https://euros-test.blogspot.jp/" 
+"https://euros-test.blogspot.jp/"
+iex> option = %Euros.HTTPOption{cookie: "foo=bar;"}
+%Euros.HTTPOption{cookie: "foo=bar;", recv_timeout: 60000, timeout: 60000}
+iex> pattern = ~r/test1/
+~r/test1/
+iex> Euros.Core.crawl(url, fn(page) -> page |> inspect |> IO.puts end, option, pattern)
 ```
 
 ## License
