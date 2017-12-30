@@ -22,4 +22,15 @@ defmodule Euros.PageTest do
                 scheme: "https", userinfo: nil}] === links
     end
   end
+
+  describe "Euros.Page.link_uris/2" do
+    test "get link uris from response" do
+      response = Euros.HTTP.fetch_pages("https://euros-test.blogspot.jp")
+      pattern = ~r/test1/
+      links = Euros.Page.link_uris(response, pattern)
+      assert [%URI{authority: "euros-test.blogspot.jp", fragment: nil,
+              host: "euros-test.blogspot.jp", path: "/2017/12/test1.html",
+              port: 443, query: nil, scheme: "https", userinfo: nil}] === links
+    end
+  end
 end

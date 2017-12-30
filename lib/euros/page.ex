@@ -21,7 +21,28 @@ defmodule Euros.Page do
     |> Enum.filter(fn(uri) -> Euros.URI.is_same_host(uri, base_uri) end)
   end
 
-  def link_uris(%HTTPoison.Error{} = response) do
+  @doc """
+  Get link uris from response body
+  Ignore duplicate uri
+  Custom filter
+
+  * `response` - HTTPoison.Response
+  * `pattern` - Regexp
+
+  ## Example
+
+      iex> Euros.HTTP.fetch_pages("https://euros-test.blogspot.jp") |> Euros.Page.link_uris(~r/test1/)
+      [%URI{authority: "euros-test.blogspot.jp", fragment: nil,
+      host: "euros-test.blogspot.jp", path: "/2017/12/test1.html", port: 443,
+      query: nil, scheme: "https", userinfo: nil}]
+  """
+  def link_uris(%HTTPoison.Response{} = response, pattern) do
+    response
+    |> link_uris
+    |> Enum.filter(fn(uri) -> uri |> URI.to_string |> String.match?(pattern) end)
+  end
+
+  def link_uris(%HTTPoison.Error{} = _) do
     []
   end
 
