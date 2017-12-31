@@ -3,7 +3,6 @@ defmodule Euros.Core do
   Provides the function for crawl web page
   """
   @default_timeout 60_000
-  @registry_name_length 32
 
   @doc """
   crawl web page
@@ -33,19 +32,8 @@ defmodule Euros.Core do
       iex> Euros.Core.crawl(url, fn(page) -> page |> inspect |> IO.puts end, option, pattern)
   """
   def crawl(url, callback, option \\ %Euros.HTTPOption{}, pattern \\ ~r/.*/) do
-    registry_name = generate_registry_name()
-    case Registry.start_link(:unique, registry_name) do
-      {:ok, _}                        -> crawl(url, registry_name, callback, option, pattern)
-      {:error, {:already_started, _}} -> crawl(url, registry_name, callback, option, pattern)
-    end
-  end
-
-  defp generate_registry_name do
-    @registry_name_length
-    |> :crypto.strong_rand_bytes
-    |> Base.encode64
-    |> binary_part(0, @registry_name_length)
-    |> String.to_atom
+    {:ok, registry_name} = Euros.CrawledRegistry.start()
+    crawl(url, registry_name, callback, option, pattern)
   end
 
   defp crawl(url, registry_name, callback, option, pattern) do
@@ -53,7 +41,7 @@ defmodule Euros.Core do
     |> Euros.HTTP.fetch_pages(option)
     |> fetched_callback(callback)
     |> Euros.Page.link_uris(pattern)
-    |> Enum.filter(fn(uri) -> Registry.lookup(registry_name, uri) === [] end)
+    |> Enum.filter(fn(uri) -> !Euros.CrawledRegistry.exists?(registry_name, uri) end)
     |> Enum.map(fn(uri) -> crawl_task(uri, registry_name, callback, option, pattern) end)
     |> Enum.each(fn(task) -> Task.await(task, @default_timeout) end)
     :ok
@@ -65,7 +53,7 @@ defmodule Euros.Core do
   end
 
   defp crawl_task(%URI{} = uri, registry_name, callback, option, pattern) do
-    Registry.register(registry_name, uri, :crawled)
+    Euros.CrawledRegistry.register(registry_name, uri)
     Task.async(fn -> crawl(URI.to_string(uri), registry_name, callback, option, pattern) end)
   end
 end
