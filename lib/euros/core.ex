@@ -33,10 +33,10 @@ defmodule Euros.Core do
   """
   def crawl(url, callback, option \\ %Euros.HTTPOption{}, pattern \\ ~r/.*/) do
     {:ok, registry_name} = Euros.CrawledRegistry.start()
-    crawl(url, registry_name, callback, option, pattern)
+    do_crawl(url, registry_name, callback, option, pattern)
   end
 
-  defp crawl(url, registry_name, callback, option, pattern) do
+  defp do_crawl(url, registry_name, callback, option, pattern) do
     url
     |> Euros.HTTP.fetch_pages(option)
     |> fetched_callback(callback)
@@ -54,6 +54,6 @@ defmodule Euros.Core do
 
   defp crawl_task(%URI{} = uri, registry_name, callback, option, pattern) do
     Euros.CrawledRegistry.register(registry_name, uri)
-    Task.async(fn -> crawl(URI.to_string(uri), registry_name, callback, option, pattern) end)
+    Task.async(fn -> do_crawl(URI.to_string(uri), registry_name, callback, option, pattern) end)
   end
 end
