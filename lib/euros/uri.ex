@@ -40,17 +40,63 @@ defmodule Euros.URI do
   end
 
   @doc """
-  Check uri path relative or absolute
+  Check url relative or absolute
 
   ## Examples
 
-      iex> Euros.URI.is_relative_path(URI.parse("/path?query=foo#fragment"))
+      iex> Euros.URI.is_relative_url(URI.parse("/path?query=foo#fragment"))
       true
-      iex> Euros.URI.is_relative_path(URI.parse("http://example.com/path?query=foo#fragment"))
+      iex> Euros.URI.is_relative_url(URI.parse("http://example.com/path?query=foo#fragment"))
       false
   """
-  def is_relative_path(%URI{} = uri) do
+  def is_relative_url(%URI{} = uri) do
     uri.host == nil
+  end
+
+  @doc """
+  Check path relative or absolute
+
+  ## Examples
+
+      iex> Euros.URI.absolute_path("path?query=foo#fragment", "/relative_path/index")
+      "/relative_path/path?query=foo#fragment"
+      iex> Euros.URI.absolute_path("/path?query=foo#fragment", "/")
+      "/path?query=foo#fragment"
+  """
+  def absolute_path(href_path, request_path) do
+    cond do
+      (href_path === nil && request_path === nil) -> "/"
+      href_path === nil                           -> "/"
+      request_path === nil                        -> concat_path(href_path, "")
+      String.at(href_path, 0) === "/"             -> href_path
+      true                                        -> concat_path(href_path, request_path)
+    end
+  end
+
+  defp concat_path(href_path, request_path) when is_binary(request_path) do
+    current_path_list = request_path
+                        |> String.split("/")
+                        |> head_path
+                        |> foot_path
+    current_path_list ++ [href_path]
+    |> Enum.join("/")
+    |> String.replace("//", "/")
+  end
+
+  defp head_path(path_list) do
+    if Enum.at(path_list, 0) === "" do
+      path_list
+    else
+      [""] ++ path_list
+    end
+  end
+
+  defp foot_path(path_list) do
+    if Enum.at(path_list, -1) === "" do
+      path_list
+    else
+      List.delete_at(path_list, -1)
+    end
   end
 
   @doc """
