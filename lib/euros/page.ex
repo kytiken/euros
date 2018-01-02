@@ -47,11 +47,10 @@ defmodule Euros.Page do
   end
 
   defp all_link_uris(%HTTPoison.Response{} = response) do
-    base_uri = to_base_uri(response)
     response.body
     |> Floki.find("a")
     |> Floki.attribute("href")
-    |> Enum.map(fn(href) -> Euros.Link.to_absolute(URI.parse(href), base_uri) end)
+    |> Enum.map(fn(href) -> Euros.Link.to_absolute(URI.parse(href), URI.parse(response.request_url)) end)
     |> Enum.filter(fn(uri) -> is_html(uri.path) end)
     |> Enum.uniq
   end
