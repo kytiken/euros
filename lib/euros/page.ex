@@ -21,6 +21,10 @@ defmodule Euros.Page do
     |> Enum.filter(fn(uri) -> Euros.URI.is_same_host(uri, base_uri) end)
   end
 
+  def link_uris(%HTTPoison.Error{} = _) do
+    []
+  end
+
   @doc """
   Get link uris from response body
   Ignore duplicate uri
@@ -42,7 +46,7 @@ defmodule Euros.Page do
     |> Enum.filter(fn(uri) -> uri |> URI.to_string |> String.match?(pattern) end)
   end
 
-  def link_uris(%HTTPoison.Error{} = _) do
+  def link_uris(%HTTPoison.Error{} = _, _) do
     []
   end
 
