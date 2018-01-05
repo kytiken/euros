@@ -25,9 +25,8 @@ iex> Euros.Core.crawl(url, fn(page) -> IO.puts(inspect(page)) end)
 
 ```elixir
 iex> url = "https://euros-test.blogspot.jp/" 
-"https://euros-test.blogspot.jp/"
-iex> option = %Euros.HTTPOption{cookie: "foo=bar;"}
-%Euros.HTTPOption{cookie: "foo=bar;", recv_timeout: 60000, timeout: 60000}
+iex> http_option = %Euros.HTTPOption{cookie: "foo=bar;"}
+iex> option = %Euros.CrawlOption{http_option: http_option}
 iex> Euros.Core.crawl(url, fn(page) -> page |> inspect |> IO.puts end, option)
 ```
 
@@ -35,11 +34,9 @@ iex> Euros.Core.crawl(url, fn(page) -> page |> inspect |> IO.puts end, option)
 
 ```elixir
 iex> url = "https://euros-test.blogspot.jp/" 
-"https://euros-test.blogspot.jp/"
 iex> option = %Euros.HTTPOption{cookie: "foo=bar;"}
-%Euros.HTTPOption{cookie: "foo=bar;", recv_timeout: 60000, timeout: 60000}
 iex> pattern = ~r/test1/
-~r/test1/
+iex> option = %Euros.CrawlOption{http_option: http_option, pattern: pattern}
 iex> Euros.Core.crawl(url, fn(page) -> page |> inspect |> IO.puts end, option, pattern)
 ```
 
