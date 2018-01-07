@@ -8,7 +8,7 @@ It is versatile, allowing you to write your own specialized spider tasks quickly
 ```elixir
 def deps do
   [
-    {:euros, "~> 0.2.1"}
+    {:euros, "~> 0.3.0"}
   ]
 end
 ```
