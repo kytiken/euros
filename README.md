@@ -21,6 +21,13 @@ iex> Euros.Core.crawl(url, fn(page) -> IO.puts(inspect(page)) end)
 %HTTPoison.Response{body: "<!DOCTYPE html><html dir='ltr'><head><meta content='width=device-width, initial-scale=1' name='viewport'/><title>euros test blog</title>....
 ```
 
+### set depth limit
+```elixir
+iex> url = "https://euros-test.blogspot.jp/" 
+iex> option = %Euros.CrawlOption{depth_limit: 2}
+iex> Euros.Core.crawl(url, fn(page) -> page |> inspect |> IO.puts end, option)
+```
+
 ### set cookie
 
 ```elixir
