@@ -58,10 +58,14 @@ defmodule Euros.Core do
   defp crawl_task(%URI{} = uri, registry_name, callback, %Euros.CrawlOption{depth_limit: depth_limit} = option) do
     Euros.CrawledRegistry.register(registry_name, uri)
     Task.async(fn ->
-      if depth_limit > 0 || depth_limit === nil do
+      unless is_too_deep(depth_limit) do
         do_crawl(URI.to_string(uri), registry_name, callback, decrement_depth_limit(option)) end
       end
     )
+  end
+
+  defp is_too_deep(depth_limit) do
+    !(depth_limit > 0 || depth_limit === nil)
   end
 
   defp decrement_depth_limit(%Euros.CrawlOption{depth_limit: depth_limit} = option) when depth_limit !== nil do
