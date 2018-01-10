@@ -64,11 +64,11 @@ defmodule Euros.Core do
     )
   end
 
-  defp decrement_depth_limit(%Euros.CrawlOption{depth_limit: depth_limit} = option) do
-    if depth_limit === nil do
-      option
-    else
-      %Euros.CrawlOption{option | depth_limit: (depth_limit - 1)}
-    end
+  defp decrement_depth_limit(%Euros.CrawlOption{depth_limit: depth_limit} = option) when depth_limit !== nil do
+    %Euros.CrawlOption{option | depth_limit: (depth_limit - 1)}
+  end
+
+  defp decrement_depth_limit(%Euros.CrawlOption{depth_limit: nil} = option) do
+    option
   end
 end
