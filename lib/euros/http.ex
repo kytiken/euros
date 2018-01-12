@@ -31,8 +31,8 @@ defmodule Euros.HTTP do
         fetch_pages(url, option)
       {:error, error} ->
         error
-      _ ->
-        IO.puts "error"
+      response ->
+        response |> inspect |> IO.puts
     end
   end
 end
