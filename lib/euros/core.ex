@@ -2,7 +2,6 @@ defmodule Euros.Core do
   @moduledoc """
   Provides the function for crawl web page
   """
-  @default_timeout 60_000
 
   @doc """
   crawl web page
@@ -46,8 +45,12 @@ defmodule Euros.Core do
     |> Euros.Page.link_uris(pattern)
     |> Enum.filter(fn(uri) -> !Euros.CrawledRegistry.exists?(registry_name, uri) end)
     |> Enum.map(fn(uri) -> crawl_task(uri, registry_name, callback, option) end)
-    |> Enum.each(fn(task) -> Task.await(task, @default_timeout) end)
+    |> Enum.each(fn(task) -> Task.await(task, crawl_task_timeout(option)) end)
     :ok
+  end
+
+  defp crawl_task_timeout(%Euros.CrawlOption{http_option: %Euros.HTTPOption{recv_timeout: recv_timeout, timeout: timeout}}) do
+    recv_timeout + timeout
   end
 
   defp fetched_callback(page, callback) do
