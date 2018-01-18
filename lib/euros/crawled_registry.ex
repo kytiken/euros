@@ -18,7 +18,7 @@ defmodule Euros.CrawledRegistry do
   """
   def start(name \\ generate_name()) do
     case Registry.start_link(:unique, name) do
-      {:ok, _}                        -> {:ok, name}
+      {:ok, _} -> {:ok, name}
       {:error, {:already_started, _}} -> {:ok, name}
     end
   end
@@ -39,9 +39,9 @@ defmodule Euros.CrawledRegistry do
 
   defp generate_name do
     @name_length
-    |> :crypto.strong_rand_bytes
-    |> Base.encode64
+    |> :crypto.strong_rand_bytes()
+    |> Base.encode64()
     |> binary_part(0, @name_length)
-    |> String.to_atom
+    |> String.to_atom()
   end
 end

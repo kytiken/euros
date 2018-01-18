@@ -23,16 +23,28 @@ defmodule Euros.HTTP do
   @doc """
   Get a web page
   """
-  def fetch_pages(url, %Euros.HTTPOption{cookie: cookie, timeout: timeout, recv_timeout: recv_timeout} = option) do
-    case HTTPoison.get(url, %{"User-Agent": @user_agent}, [hackney: [cookie: cookie], timeout: timeout, recv_timeout: recv_timeout]) do
+  def fetch_pages(
+        url,
+        %Euros.HTTPOption{cookie: cookie, timeout: timeout, recv_timeout: recv_timeout} = option
+      ) do
+    case HTTPoison.get(
+           url,
+           %{"User-Agent": @user_agent},
+           hackney: [cookie: cookie],
+           timeout: timeout,
+           recv_timeout: recv_timeout
+         ) do
       {:ok, response} ->
         response
+
       {:error, %HTTPoison.Error{id: nil, reason: :timeout}} ->
         fetch_pages(url, option)
+
       {:error, error} ->
         error
+
       response ->
-        response |> inspect |> IO.puts
+        response |> inspect |> IO.puts()
     end
   end
 end

@@ -6,8 +6,8 @@ defmodule Euros.Mixfile do
       app: :euros,
       version: "0.3.0",
       elixir: "~> 1.5",
-      build_embedded: Mix.env == :prod,
-      start_permanent: Mix.env == :prod,
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
       deps: deps(),
@@ -16,9 +16,9 @@ defmodule Euros.Mixfile do
       name: "Euros",
       source_url: "https://github.com/kytiken/euros",
       homepage_url: "https://github.com/kytiken/euros",
-      docs: [main: "Euros.Core", # The main page in the docs
-            extras: ["README.md"]]
-      ]
+      # The main page in the docs
+      docs: [main: "Euros.Core", extras: ["README.md"]]
+    ]
   end
 
   # Run "mix help compile.app" to learn about applications.

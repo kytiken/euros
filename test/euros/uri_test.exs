@@ -10,9 +10,9 @@ defmodule Euros.URITest do
     end
 
     test "return false when different host uri" do
-       href_uri = URI.parse("http://a.example.com/path?query=foo#fragment")
-       base_uri = URI.parse("http://b.example.com")
-       Euros.URI.is_same_host(href_uri, base_uri)
+      href_uri = URI.parse("http://a.example.com/path?query=foo#fragment")
+      base_uri = URI.parse("http://b.example.com")
+      Euros.URI.is_same_host(href_uri, base_uri)
     end
 
     test "return true when relative path uri" do
@@ -37,49 +37,49 @@ defmodule Euros.URITest do
 
   describe "Euros.URI.absolute_path/2" do
     test "href_path is absolute path, request_path is absolute path" do
-      href_path    = "/hoge"
+      href_path = "/hoge"
       request_path = "/fuga/index"
       assert "/hoge" === Euros.URI.absolute_path(href_path, request_path)
     end
 
     test "href_path is relative path, request_path is absolute document path" do
-      href_path    = "fuga"
+      href_path = "fuga"
       request_path = "/hoge/index"
       assert "/hoge/fuga" === Euros.URI.absolute_path(href_path, request_path)
     end
 
     test "href_path is relative path, request_path is absolute dir path" do
-      href_path    = "fuga"
+      href_path = "fuga"
       request_path = "/hoge/"
       assert "/hoge/fuga" === Euros.URI.absolute_path(href_path, request_path)
     end
 
     test "href_path is absolute path, request_path is relative path" do
-      href_path    = "/hoge"
+      href_path = "/hoge"
       request_path = "fuga"
       assert "/hoge" === Euros.URI.absolute_path(href_path, request_path)
     end
 
     test "href_path is relative path, request_path is relative path" do
-      href_path    = "hoge"
+      href_path = "hoge"
       request_path = "fuga"
       assert "/hoge" === Euros.URI.absolute_path(href_path, request_path)
     end
 
     test "href is nil" do
-      href_path    = nil
+      href_path = nil
       request_path = "/"
       assert "/" === Euros.URI.absolute_path(href_path, request_path)
     end
 
     test "href is index, request is nil" do
-      href_path    = "index"
+      href_path = "index"
       request_path = nil
       assert "/#{href_path}" === Euros.URI.absolute_path(href_path, request_path)
     end
 
     test "href is nil, request is nil" do
-      href_path    = nil
+      href_path = nil
       request_path = nil
       assert "/" === Euros.URI.absolute_path(href_path, request_path)
     end

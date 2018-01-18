@@ -3,18 +3,18 @@ defmodule Euros.CrawledRegistryTest do
 
   describe "Euros.CrawledRegistry.start/1" do
     test "0 argument" do
-      assert {:ok, registry_name} = Euros.CrawledRegistry.start
+      assert {:ok, registry_name} = Euros.CrawledRegistry.start()
       assert "" !== registry_name
     end
 
     test "1 argument" do
-      assert {:ok, registry_name} = Euros.CrawledRegistry.start(:"hello")
-      assert :"hello" === registry_name
+      assert {:ok, registry_name} = Euros.CrawledRegistry.start(:hello)
+      assert :hello === registry_name
     end
 
     test "already started" do
-      assert {:ok, _} = Euros.CrawledRegistry.start(:"hello")
-      assert {:ok, _} = Euros.CrawledRegistry.start(:"hello")
+      assert {:ok, _} = Euros.CrawledRegistry.start(:hello)
+      assert {:ok, _} = Euros.CrawledRegistry.start(:hello)
     end
   end
 
