@@ -16,9 +16,10 @@ defmodule Euros.Page do
   """
   def link_uris(%HTTPoison.Response{} = response) do
     base_uri = to_base_uri(response)
+
     response
     |> all_link_uris
-    |> Enum.filter(fn(uri) -> Euros.URI.is_same_host(uri, base_uri) end)
+    |> Enum.filter(fn uri -> Euros.URI.is_same_host(uri, base_uri) end)
   end
 
   def link_uris(%HTTPoison.Error{} = _) do
@@ -43,7 +44,7 @@ defmodule Euros.Page do
   def link_uris(%HTTPoison.Response{} = response, pattern) do
     response
     |> link_uris
-    |> Enum.filter(fn(uri) -> uri |> URI.to_string |> String.match?(pattern) end)
+    |> Enum.filter(fn uri -> uri |> URI.to_string() |> String.match?(pattern) end)
   end
 
   def link_uris(%HTTPoison.Error{} = _, _) do
@@ -54,9 +55,11 @@ defmodule Euros.Page do
     response.body
     |> Floki.find("a")
     |> Floki.attribute("href")
-    |> Enum.map(fn(href) -> Euros.Link.to_absolute(URI.parse(href), URI.parse(response.request_url)) end)
-    |> Enum.filter(fn(uri) -> is_html(uri.path) end)
-    |> Enum.uniq
+    |> Enum.map(fn href ->
+      Euros.Link.to_absolute(URI.parse(href), URI.parse(response.request_url))
+    end)
+    |> Enum.filter(fn uri -> is_html(uri.path) end)
+    |> Enum.uniq()
   end
 
   defp is_html(uri_path) when uri_path != nil do
@@ -73,6 +76,6 @@ defmodule Euros.Page do
 
   defp to_base_uri(response) do
     response.request_url
-    |> Euros.URI.to_base_uri
+    |> Euros.URI.to_base_uri()
   end
 end

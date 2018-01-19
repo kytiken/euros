@@ -65,20 +65,22 @@ defmodule Euros.URI do
   """
   def absolute_path(href_path, request_path) do
     cond do
-      (href_path === nil && request_path === nil) -> "/"
-      href_path === nil                           -> "/"
-      request_path === nil                        -> concat_path(href_path, "")
-      String.at(href_path, 0) === "/"             -> href_path
-      true                                        -> concat_path(href_path, request_path)
+      href_path === nil && request_path === nil -> "/"
+      href_path === nil -> "/"
+      request_path === nil -> concat_path(href_path, "")
+      String.at(href_path, 0) === "/" -> href_path
+      true -> concat_path(href_path, request_path)
     end
   end
 
   defp concat_path(href_path, request_path) when is_binary(request_path) do
-    current_path_list = request_path
-                        |> String.split("/")
-                        |> head_path
-                        |> foot_path
-    current_path_list ++ [href_path]
+    current_path_list =
+      request_path
+      |> String.split("/")
+      |> head_path
+      |> foot_path
+
+    (current_path_list ++ [href_path])
     |> Enum.join("/")
     |> String.replace("//", "/")
   end

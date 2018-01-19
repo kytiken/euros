@@ -18,8 +18,11 @@ defmodule Euros.Link do
        path: "/path", port: 80, query: "query=foo", scheme: "http", userinfo: nil}
   """
   def to_absolute(%URI{} = href_uri, %URI{} = request_uri) do
-    new_uri = %URI{href_uri | fragment: nil,
-                              path: Euros.URI.absolute_path(href_uri.path, request_uri.path)}
+    new_uri = %URI{
+      href_uri
+      | fragment: nil,
+        path: Euros.URI.absolute_path(href_uri.path, request_uri.path)
+    }
 
     if Euros.URI.is_relative_url(href_uri) do
       URI.merge(Euros.URI.to_base_uri(request_uri), new_uri)
