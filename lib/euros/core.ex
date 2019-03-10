@@ -25,7 +25,7 @@ defmodule Euros.Core do
       iex> option = %Euros.CrawlOption{http_option: http_option}
       iex> Euros.Core.crawl(url, fn(page) -> page |> inspect |> IO.puts end, option)
 
-  if cusotm url pattern
+  if custom url pattern
 
       iex> url = "https://euros-test.blogspot.jp/" 
       iex> option = %Euros.HTTPOption{cookie: "foo=bar;"}
